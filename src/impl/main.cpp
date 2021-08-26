@@ -59,7 +59,17 @@ void find_paths(const std::vector<int> &inodes, const char *path) {
         } else {
             for (long unsigned int inode : inodes) {
                 if (inode == dir->d_ino) {
-                    printf("%lu %s\n", inode, dir->d_name);
+                    char *file_path = (char *)malloc(sizeof(char) * strlen(path) + strlen(dir->d_name) + 2);
+                    if (file_path == nullptr) {
+                        int err = errno;
+                        fprintf(stderr, "malloc error: %s\n", strerror(err));
+                        exit(1);
+                    }
+                    strcpy(file_path, path);
+                    strcat(file_path, "/");
+                    strcat(file_path, dir->d_name);
+                    printf("%lu %s\n", inode, file_path);
+                    free(file_path);
                 }
             }
         }
