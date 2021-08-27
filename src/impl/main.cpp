@@ -27,14 +27,14 @@ extern "C" {
 #include <vector>
 #include <iostream>
 
-void get_inodes(std::vector<int> &inodes) {
-    int inode;
+void get_inodes(std::vector<ino_t> &inodes) {
+    ino_t inode;
     while (std::cin >> inode) {
         inodes.push_back(inode);
     }
 }
 
-void find_paths(const std::vector<int> &inodes, const char *path) {
+void find_paths(const std::vector<ino_t> &inodes, const char *path) {
     DIR *d;
     struct dirent *dir;
     d = opendir(path);
@@ -57,7 +57,7 @@ void find_paths(const std::vector<int> &inodes, const char *path) {
             find_paths(inodes, new_path);
             free(new_path);
         } else {
-            for (long unsigned int inode : inodes) {
+            for (ino_t inode : inodes) {
                 if (inode == dir->d_ino) {
                     char *file_path = (char *)malloc(sizeof(char) * strlen(path) + strlen(dir->d_name) + 2);
                     if (file_path == nullptr) {
@@ -78,7 +78,7 @@ void find_paths(const std::vector<int> &inodes, const char *path) {
 }
 
 int main(int argc, char *argv[]) {
-    std::vector<int> inodes;
+    std::vector<ino_t> inodes;
     if (argc < 2) {
         printf("%s", "Must pass path to file system");
     }
