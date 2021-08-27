@@ -81,7 +81,9 @@ int main(int argc, char *argv[]) {
     std::vector<ino_t> inodes;
     if (argc < 2) {
         printf("%s", "Must pass path to file system");
+        exit(1);
     }
     get_inodes(inodes);
     find_paths(inodes, argv[1]);
+    return 0;
 }
