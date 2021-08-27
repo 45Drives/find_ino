@@ -25,5 +25,5 @@ Table of inodes and file paths:
 
 ## Finding Missing Object File Paths in Cephfs
 ```bash
-ceph pg dump_stuck | grep recovery_unfound | awk '{print $1}' | while read pg; ceph pg $pg list_unfound | jq '.objects[].oid.oid' | sed -e 's/"//g' | xargs printf "%d\n" 0x{}; done | find_ino /mnt/fsgw | tee missing_files.txt
+ceph pg dump_stuck | grep recovery_unfound | awk '{print $1}' | while read pg; do ceph pg $pg list_unfound | jq '.objects[].oid.oid' | sed -e 's/"//g' | cut -d'.' -f1 | xargs -I{} printf "%d\n" 0x{}; done | find_ino /mnt/fsgw | tee missing_files.txt
 ```
